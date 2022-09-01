@@ -1,0 +1,101 @@
+{% extends 'dashboard-base.html' %} <!--get all content from base.html-->
+
+
+{% block dash_bidding %}active{% endblock dash_bidding %}<!--active-button-->
+
+
+<!--***Content************************-->
+{% block dashboard_content %}
+
+<div class="dashboard-details">
+    <h1>Create Bidding <i class="fa-solid fa-square-plus"></i></h1>
+
+    {% if messages %}
+    <ul class="messages-profile">
+        {% for message in messages %}
+            <li style="background-color:transparent;"  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <span style="background-color:#ffd4d3; border-radius:5px;">{{form.errors}}</span>
+    
+    <!--==Form=========================-->
+    <form class="client-form" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <p>
+            <label>Author<span>*</span></label>
+            <select name="bidder">
+                <option value="{{user.id}}">{{user.username}}</option>
+            </select>
+        </p>
+        <p>
+            <label>Title<span>*</span></label>
+            {{form.title}}
+        </p>
+        <p>
+            <label>Slug<span>*</span></label>
+            {{form.slug}}
+        </p>
+        <p>
+            <label>Description<span>*</span></label>
+            {{form.content}}
+        </p>
+        <p>
+            <label>Marla</label>
+            {{form.marla}}
+        </p>
+        <p>
+            <label>Thumbnail<span>*</span></label>
+            {{form.thumbnail}}
+        </p>
+        <p>
+            <label>Bidding Starting Price</label>
+            {{form.bidding_start_price}}
+        </p>
+        <p>
+            <label>Bidding End Date</label>
+            <input type="datetime-local" name="end_bidding"/>
+        </p>
+        <p>
+            <label>Property Image - 1</label>
+            {{form.property_img1}}
+        </p>
+        <p>
+            <label>Property Image - 2</label>
+            {{form.property_img2}}
+        </p>
+        <p>
+            <label>Property Image - 3</label>
+            {{form.property_img3}}
+        </p>
+        <p>
+            <label>Address<span>*</span></label>
+            {{form.address}}
+        </p>
+        <p>
+            <label>City<span>*</span></label>
+            {{form.city}}
+        </p>
+        <p>
+            <label>Rooms</label>
+            {{form.room}}
+        </p>
+        <p>
+            <label>Bathrooms</label>
+            {{form.bathroom}}
+        </p>
+        <p>
+            <label>Kitchens</label>
+            {{form.kitchen}}
+        </p>
+        <p>
+            <label>Floors</label>
+            {{form.floor}}
+        </p>
+        <button>Post</button>
+    </form>
+
+</div>
+
+{% endblock dashboard_content %}

@@ -1,0 +1,245 @@
+<!doctype html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!--==Title============================================================-->
+<title>Real Estate Adivser System - {% block title %}{% endblock title %}</title>
+
+{% load static %}
+<!--==Stylesheet=======================================================-->
+<link rel="stylesheet" type="text/css" href="{% static 'css/p_style.css' %}"/>
+
+<!--==Fav-icon=========================================================-->
+<link rel="shortcut icon" href="{% static 'images/fav-icon.png' %}"/>
+
+<!--==Using-Font-Awesome-for-Icons=====================================-->
+<script src="https://kit.fontawesome.com/6bd6c771de.js" crossorigin="anonymous"></script>
+
+<!--==Import-Font-Family-From-Google-Font======================-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+<!--==Swiper-CSS===============================================-->
+<link rel="stylesheet" href="{% static 'css/swiper-bundle.min.css' %}"/>
+
+</head>
+
+<body>
+
+    <!--==Main-Section===============================-->
+    <section id="main" class="{% block othermain %}{% endblock othermain %}">
+    
+    <!--==Navigation=================================-->
+    <nav class="navigation-container">
+        <div class="navigation">
+        <!--logo*******************************-->
+        <a href="{% url 'index' %}" class="logo">
+            <img src="{% block navlogo %}{% endblock navlogo %}" alt="Real Estate Adivser System">
+        </a>
+        <!--nav-container**********************-->
+        <div class="nav-side-container">
+            <!--menu-btn-->
+            <input class="menu-btn" type="checkbox" id="menu-btn" />
+            <label class="menu-icon" for="menu-btn"><span class="nav-icon"></span></label>
+            <!--menu-->
+            <div class="menu-container">
+            <ul class="menu">
+                <li><a href="{% url 'index' %}" class="active">Home</a></li>
+                <li><a href="{% url 'all_bidding' %}">Bidding</a></li>
+                <li><a href="{% url 'allproperty' %}">All Properties</a></li>
+                <li><a href="{% url 'contact' %}">Contact</a></li>
+            </ul>
+            </div>
+            <!--login-&-contact-->
+            <div class="nav-login-contact">
+                <a href="tel:+{{footerdata.phone}}" class="nav-phone"><i class="fa-solid fa-phone"></i> +{{footerdata.phone}}</a>
+                {% if user.is_authenticated %}
+                <!--==User=====================================-->
+                <div class="nav-user">
+
+                <input type="checkbox" class="user-icon-checkbox" id="user-icon">
+                <label for="user-icon" class="user-icon">
+                    <img src="/{{user.profile_img}}"/>
+                </label>
+
+                <div class="user-drop-menu">
+                    {% if user.is_seller or user.is_admin or user.is_superuser %}
+                    <a href="{% url 'dashboard' %}" class="nav-drop-box"><i class="fa-solid fa-chart-simple"></i> DashBoard</a>
+                    {% endif %}
+                    <a href="{% url 'my_bidding_list' %}" class="nav-drop-box"><i class="fa-solid fa-gavel"></i> Bidding</a>
+                    <a href="{% url 'profile_view' %}" class="nav-drop-box"><i class="fa-solid fa-user"></i> Profile</a>
+                    <a href="{% url 'logoutUser' %}" class="nav-logout">Logout <i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+                </div>
+            </div>
+            {% else %}
+            <a href="{% url 'login_view' %}" class="nav-login-btn" style="color:#ffffff;">Login <i class="fa-solid fa-arrow-right-to-bracket"></i></a>
+            {% endif %}
+            </div>
+        </div>
+        </div>
+    </nav>
+    
+
+    <!--**Main-img*******************************-->
+    <div class="main-bg-img">
+        <img src="{% static 'images/Real_Estate_Adivsor_System_Main2_Banner.jpg' %}" alt="Real Estate Adivser System Banner">
+    </div>
+
+
+    <!--**Contact********************************-->
+    <div class="main-contact">
+        <!--phone-icon********-->
+        <div class="main-contact-form-icon">
+            <i class="fa-solid fa-phone-volume"></i>
+        </div>
+        <!--Heading************-->
+        <h3>Let Us Call You!</h3>
+        <p> To help you choose your property</p>
+        <!--Form****************-->
+        <form method="post" action="callrequest">
+        <!--**message**********-->
+        {% if messages %}
+        <ul class="messages-profile">
+        {% for message in messages %}
+            <li style="margin:auto; background-color:transparent;"  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+        
+        {% csrf_token %}
+            <div class="main-form-box">
+                <!--Name-->
+                <input type="text" name="name" class="main-form-name" placeholder="Your Name" required/>
+                <!--Phone-->
+                <input type="tel" name="phone" class="main-form-phone" placeholder="Your Number" required/>
+            </div>
+            <!--email-->
+            <input type="email" name="email" class="main-form-email" placeholder="Enter Your Email" required/>
+            <!--message-->
+            <textarea name="message" class="main-form-message" placeholder="Tell us about desired property" required></textarea>
+            <!--submit-->
+            <input type="submit" value="Submit" class="main-form-btn"/>
+        </form>
+    </div>
+
+    </section>
+
+
+
+    {% block body %}{% endblock body %}
+
+
+
+
+
+    <footer>
+        <div class="footer-container">
+    
+    
+    
+            <!--heading-->
+            <div class="footer-heading">
+                <h4>It’s time to stop scrolling.
+                    <br/>
+                    Let’s create something.
+                </h4>
+    
+                <h3>get in touch.</h3>
+            </div>
+    
+            <!--footer-content-->
+            <div class="footer-content">
+    
+                <!--box-->
+                <div class="footer-box">
+                    <strong>explore</strong>
+                    <ul>
+                        {% for staticposts in staticposts%}
+                            <li style="text-transform: none;"><a href="{{staticposts.slug}}" class="active">{{staticposts.page_name}}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+    
+                <!--box-->
+                <div class="footer-box">
+                    <strong>Social</strong>
+                    <ul>
+                        {% if footerdata.facebook == None %}
+
+                        {% else %}
+                            <li><a href="{{footerdata.facebook}}">Facebook</a></li>
+                        {% endif %}
+
+                        {% if footerdata.instagram == None %}
+
+                        {% else %}
+                            <li><a href="{{footerdata.instagram}}">Instagram</a></li>
+                        {% endif %}
+
+                        {% if footerdata.twitter == None %}
+
+                        {% else %}
+                            <li><a href="{{footerdata.twitter}}">Twitter</a></li>
+                        {% endif %}
+
+                        {% if footerdata.youtube == None %}
+
+                        {% else %}
+                            <li><a href="{{footerdata.youtube}}">Youtube</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+    
+                <!--box-->
+                <div class="footer-box">
+                    <strong>Contact</strong>
+                    <ul>
+                        <li><a href="mailto:{{footerdata.email}}">{{footerdata.email}}</a></li>
+                        <li><a href="tel:+{{footerdata.phone}}">+{{footerdata.phone}}</a></li>
+                    </ul>
+                </div>
+    
+                <!--box-->
+                <div class="footer-box">
+                    <strong>Real Estate</strong>
+                    <ul>
+                        <li class="footer-address">{{footerdata.address}}</li>
+                    </ul>
+                </div>
+    
+            </div>
+    
+    
+            <!--footer-bottom-->
+            <div class="footer-bottom">
+    
+                <!--link-->
+                <div class="copyright">
+                </div>  
+                
+                <!--copyright-->
+                <div class="copyright">
+                    <span>Made By {{footerdata.made_by}}</span>
+                    <span>© {{footerdata.copyright}}</span>
+                </div>
+    
+            </div>
+    
+    
+        </div>
+    
+        </footer>
+
+    <!--==Swiper-JS===============================================-->
+    <script src="{% static 'js/swiper-bundle.min.js' %}"></script>
+    {% block jsscript %}{% endblock jsscript %}
+
+
+
+</body>
+
+</html>

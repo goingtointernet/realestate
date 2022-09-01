@@ -1,0 +1,24 @@
+{% extends 'dashboard-base.html' %} <!--get all content from base.html-->
+
+
+{% block dash_posts %}active{% endblock dash_posts %}<!--active-button-->
+
+
+<!--***Content************************-->
+{% block dashboard_content %}
+
+<div class="dashboard-details">
+    <!--heading-->
+    <h1>Delete Post <i class="fa-solid fa-trash"></i></h1>
+
+    <form method="POST" enctype="multipart/form-data" >
+        {% csrf_token %}
+        
+       <strong>Are You Sure?</strong>
+        
+        <button style="background-color:#f31212; max-width:250px; width:100%; boder:none; outline:none;" >Delete</button>
+    </form>
+
+</dv>
+
+{% endblock dashboard_content %}

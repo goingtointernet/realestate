@@ -1,0 +1,113 @@
+{% extends 'base.html' %} <!--get all content from base.html-->
+
+
+<!--==Title========================-->
+{% block title %}Profile{% endblock title %}
+
+
+<!--==Main-Class====================-->
+{% block othermain %}change-main{% endblock othermain %}
+
+<!--==Nav-logo=====================-->
+{% block navlogo %}
+{% load static %}
+{% static 'images/real_estate_advisor_system_blackLogo.png' %}
+{% endblock navlogo %}
+
+
+
+<!--==Body=========================-->
+{% block body %}
+
+
+
+
+
+
+    <section id="profile">
+
+    <h2>Need to update your public profile?</h2>
+    
+    {% if messages %}
+    <ul class="messages-profile">
+        {% for message in messages %}
+            <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+    
+        <!--profile-img-->
+        <div class="profile-img-container">
+        <div class="profle-img">
+            <img src="/{{user.profile_img}}" />
+        </div>
+        {{form.profile_img}}
+        </div>
+
+        <div class="profile-text-container">
+
+        <!--username-->
+        <div class="p-username p-input-box">
+            <label for="Username">Username<span>*</span></label>
+            <div class="profile-not-change-box">{{user.username}}</div>
+        </div>
+
+        <div class="prifle-name-container">
+            <!--First-Name-->
+            <div class="p-f-name p-input-box">
+                <label>First Name<span>*</span></label>
+                {{form.first_name}}
+            </div>
+            <!--Last-Name-->
+            <div class="p-l-name p-input-box">
+                <label >Last Name<span>*</span></label>
+                {{form.last_name}}
+            </div>
+        </div>
+
+        <!--email-->
+        <div class="p-email p-input-box">
+            <label>Email<span>*</span></label>
+            <div class="profile-not-change-box">{{user.email}}</div>
+        </div>
+        <!--username-->
+        <div class="p-username p-input-box">
+            <label for="Username">Phone<span>*</span></label>
+            {{form.phone}}
+        </div>
+        <!--Bio-->
+        <div class="p-bio p-input-box">
+            <label >Bio<span>*</span></label>
+            {{form.bio}}
+        </div>
+
+        {{form.errors}}
+
+
+        <input type="submit" value="Update">
+
+        </div>
+
+    </form>
+
+
+    <section id="change-password">
+        <h2>Do You Want To Change Password?</h2>
+
+        <form>
+            <a href="{% url 'userchangepass' %}" class="go-to-change-pass-btn"><i class="fa-solid fa-lock"></i> Change Password</a>
+        </form>
+    </section>
+
+
+    
+
+
+
+    </section>
+
+    {% endblock body %}

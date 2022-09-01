@@ -1,0 +1,81 @@
+{% extends 'dashboard-base.html' %} <!--get all content from base.html-->
+
+
+{% block dash_posts %}active{% endblock dash_posts %}<!--active-button-->
+
+
+<!--***Content************************-->
+{% block dashboard_content %}
+
+<div class="dashboard-details">
+    <!--heading-->
+    <h1 class="dash-heading"><i class="fa-solid fa-copy"></i> Your All Posts</h1>
+
+    {% if messages %}
+    <ul class="messages-profile" style="margin:10px auto;">
+        {% for message in messages %}
+            <li style="background-color:transparent; margin:10px auto;"  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+
+    {% if buyproperty|length < 1 %}
+    <div style="color:red; text-align:center;">
+        <br/>
+        <span>*No Post Created, <b>Please Create Post</b></span>
+    </div>
+    {% endif %}
+
+
+    {% for properties  in buyproperty %}
+        {% if properties.author_id == user.id%}
+            <div class="dash-all-post-box">
+                <div class="dash-all-post-img">
+                    <img src="/{{properties.thumbnail}}"/>
+                </div>
+                <div class="dash-all-post-box-title">
+                    <strong>{{properties.title}}</strong>
+                    <p>{{properties.category}}</p>
+                </div>
+                <div class="dash-all-post-box-btns">
+                    <a href="{% url 'edit_post' properties.slug %}" class="dash-post-edit-btn"><i class="fa-solid fa-pen-to-square"></i></a>
+                    <a href="{% url 'delete_post' properties.slug %}" class="dash-post-delete-btn"><i class="fa-solid fa-trash"></i></a>
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+
+</div>
+
+<!--==Other-User-Post-->
+
+{% if user.is_admin or user.is_superuser %}
+<div class="dashboard-details">
+    <!--heading-->
+    <h1 class="dash-heading"><i class="fa-solid fa-copy"></i> Other User Posts</h1>
+
+
+    {% for properties  in buyproperty %}
+        {% if properties.author_id != user.id%}
+            <div class="dash-all-post-box">
+                <div class="dash-all-post-img">
+                    <img src="/{{properties.thumbnail}}"/>
+                </div>
+                <div class="dash-all-post-box-title">
+                    <strong>{{properties.title}}</strong>
+                    <p>{{properties.category}} - <span style="color:#126dff; font-size:0.8rem;">{{properties.author.username}}<span></p>
+                </div>
+                <div class="dash-all-post-box-btns">
+                    <a href="{% url 'edit_post' properties.slug %}" class="dash-post-edit-btn"><i class="fa-solid fa-pen-to-square"></i></a>
+                    <a href="{% url 'delete_post' properties.slug %}" class="dash-post-delete-btn"><i class="fa-solid fa-trash"></i></a>
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+</div>
+
+<a class="sticky-create-btn" href="{% url 'create_post' %}">+</a>
+
+{% endblock dashboard_content %}

@@ -1,0 +1,363 @@
+{% extends 'base.html' %} <!--get all content from base.html-->
+
+
+<!--==Title========================-->
+{% block title %}{{post.slug}}{% endblock title %}
+
+
+<!--==Main-Class====================-->
+{% block othermain %}change-main{% endblock othermain %}
+
+<!--==Nav-logo=====================-->
+{% block navlogo %}
+{% load static %}
+{% static 'images/real_estate_advisor_system_blackLogo.png' %}
+{% endblock navlogo %}
+
+
+<!--==Body=========================-->
+{% block body %}
+
+
+    <!--==Post-page=============================-->
+    <section id="property-post-page">
+
+    {% if post == None %}
+    <div class="search-not-found" style="margin:60px auto">
+        <img src="{% static 'images/not_found.svg' %}" />
+        <span>Page Not Found, <b>404</b></span>
+    </div>
+
+    {% else %}
+
+
+        <div class="property-post-container bidding-post-container">
+            <span class="property-post-link"><a href="{% url 'index' %}">Home</a> > <a href="{% url 'all_bidding' %}">Bidding</a></span>
+        
+            <div class="post-page-wrapper">
+            <div class="post-page-details-container">
+            <!--**title***********************-->
+            <div class="property-post-title-container">
+                <div class="property-post-title">
+                    <span class="property-post-location"><i class="fa-solid fa-user"></i> {{post.bidder}}</span>
+                    <h1>{{post.title}}</h1>
+                    <span class="property-post-category">Available</span>
+                    <span class="property-post-location"><i class="fa-solid fa-location-dot"></i> {{post.address}}, {{post.city}}</span>               
+                 </div>
+                
+                <div class="property-post-price-container">
+            
+                    <span class="property-post-price"><span><b>Current:</b></span><span class="post-page-pkr">Pkr.</span>{{post.bidding_start_price}}</span>
+
+                    {% if post.marla > 0 %}
+                        <span class="property-post-area">{{post.marla}} Marla</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if user.is_admin or user.is_superuser %}
+            <div class="dash-all-post-box-btns" style="margin-top:10px; margin-left:0px;">
+                <a href="{% url 'edit_post' post.slug %}" class="dash-post-edit-btn"><i class="fa-solid fa-pen-to-square"></i></a>
+                <a href="{% url 'delete_post' post.slug %}" class="dash-post-delete-btn"><i class="fa-solid fa-trash"></i></a>
+            </div>
+            {% endif %}
+
+            <!--**Slider************************-->
+            <div class="slider-conatiner">
+            <div class="swiper mySwiper">
+                <div class="swiper-wrapper">
+                    {% if post.thumbnail != '' %}
+                    <div class="swiper-slide">
+                        <img src="/{{post.thumbnail}}" alt="">
+                    </div>
+                    {% endif %}
+                    {% if post.property_img1 != '' %}
+                    <div class="swiper-slide">
+                        <img src="/{{post.property_img1}}" alt="">
+                    </div>
+                    {% endif %}
+                    {% if post.property_img2 != '' %}
+                    <div class="swiper-slide">
+                        <img src="/{{post.property_img2}}" alt="">
+                    </div>
+                    {% endif %}
+                    {% if post.property_img3 != '' %}
+                    <div class="swiper-slide">
+                        <img src="/{{post.property_img3}}" alt="">
+                    </div>
+                    {% endif %}
+                    
+                </div>
+            </div>
+            <!--btns-->
+            <div class="slider-btns">
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
+            </div>
+            </div>
+
+            
+            <!--==Timer-and-bidding======================-->
+            <div class="timer-bid-container">
+                <strong><i class="fa-solid fa-clock"></i> Bidding End After</strong>
+                <!--==Count-down======================-->
+                <div class="p-box-countdown">
+                    <div style="display:none;" id="endbid">{{post.end_bidding | date:"M d, Y H:m:s"}}</div>
+                
+                    <div class="bid-countdown-container">
+                    <div class="bid-countown">
+                        <div class="bid-countdown-box">
+                            <span id="countdays"></span>
+                            <small>Day's</small>
+                        </div>
+                        <div class="bid-countdown-box">
+                            <span id="counthours"></span>
+                            <small>Hour's</small>
+                        </div>
+                        <div class="bid-countdown-box">
+                            <span id="countminutes"></span>
+                            <small>Minute's</small>
+                        </div>
+                        <div class="bid-countdown-box">
+                            <span id="countseconds"></span>
+                            <small>Second's</small>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+            
+            {% if post.end_bidding > current_datetime %}
+            <form method="POST" class="bidding-participate-form">
+                {% csrf_token %}
+                <input type="hidden" name="paricipator" value="{{user.id}}"/>
+                <input type="hidden" name="item" value="{{post.id}}"/> 
+                <strong>Paricipate</strong>
+                <div class="bidding-amount">
+                    <span>Rs.</span>
+                    <input type="number" min="{{min_value}}" value="{{min_value}}" placeholder="Bidding Price" name="bidding_price" required/>
+                </div>
+                <button>Submit</button>
+            </form>
+            {% else %}
+            <span style="color:red; font-weight:600; text-align:center; margin-top:20px;">*Bidding Is Close</span>
+            {% endif %}
+
+            {% if top_bidder != None %}
+                <div class="current-top-bidder">
+                    {% if post.end_bidding < current_datetime %}
+                        {% if top_bidder.paricipator.username == user.username %}
+                        <strong style="margin:auto; font-size:1.2rem; text-align:center;">🎉🎉Congratulations, You are Winner🎉🎉</strong>
+                        {% else %}
+                        <strong style="margin:auto; font-size:1.2rem;">🎉🎉Winner🎉🎉</strong>
+                        {% endif %}
+                    {% else %}
+                    <strong>Top Bidder</strong>
+                    {% endif %}
+                    <table>
+                        <tr>
+                            <th>{{top_bidder.paricipator.username}}</th>
+                            <th><span>Rs.</span>{{top_bidder.bidding_price}}</th>
+                        </tr>
+                    </table>
+                    {% if post.end_bidding < current_datetime %}
+                        {% if top_bidder.paricipator.username == user.username %}
+                        <div class="winner-seller-info">
+                            <strong>Seller Contact Info:-</strong>
+                            <div class="winner-contact-text">
+                                <span><i class="fa-solid fa-envelope"></i> {{post.bidder.email}}</span>
+                                <span><i class="fa-solid fa-phone"></i> {{post.bidder.phone}}</span>
+                            </div>
+                            <p>*Please Contact The Seller</p>
+                        </div>
+                        {% else %}
+                        <p class="better-luck">*<b>Better Luck Next Time</b></p>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            {% endif %}
+
+            <div class="participator-list">
+                <table>
+                    <tr>
+                        <th>Participator</th>
+                        <th>Bidding Price</th>
+                    </tr>
+                    
+
+                    {% for bidding_participate in bidding_participate %}
+                    <tr>
+                        <td class="bid-paricipator-username">{{bidding_participate.paricipator.username}}</td>
+                        <td class="bid-paricipator-price">Rs.<span>{{bidding_participate.bidding_price}}</span></td>
+                    </tr>
+                    {% endfor %}
+            
+                </table>
+
+
+                {% if top_bidder == None %}
+                    <p style="color:#FF0000;">*Not Any Perticipator Yet</p>
+                {% endif %}
+            </div>
+            
+            <!--==Overview============================-->
+            <div class="post-property-overview">
+                <strong><i class="fa-solid fa-house-chimney-window"></i> Property Overview</strong>
+                <div class="proerty-overview-container">
+                    {% if post.marla > 0 %}
+                    <!---->
+                    <div class="property-overview-box">
+                        
+                        <div class="property-overview-box-img">
+                            <img src="{% static 'images/area.png' %}" alt="">
+                            <span>{{post.marla}}</span>
+                        </div>
+                        
+                        <div class="property-overview-box-text">
+                            <span>Marla</span>
+                        </div>
+                    </div>
+                    {% endif %}
+
+
+                    {% if post.room > 0 %}
+                    <!---->
+                    <div class="property-overview-box">
+                        <div class="property-overview-box-img">
+                            <i class="fa-solid fa-bed"></i>
+                            <span>{{post.room}}</span>
+                        </div>
+                        <div class="property-overview-box-text">
+                            <span>Bedroom</span>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if post.bathroom > 0 %}
+                    <!---->
+                    <div class="property-overview-box">
+                        <div class="property-overview-box-img">
+                            <i class="fa-solid fa-shower"></i>
+                            <span>{{post.bathroom}}</span>
+                        </div>
+                        <div class="property-overview-box-text">
+                            <span>bathroom</span>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if post.floor > 0 %}
+                    <!---->
+                    <div class="property-overview-box">
+                        <div class="property-overview-box-img">
+                            <i class="fa-solid fa-turn-up"></i>
+                            <span>{{post.floor}}</span>
+                        </div>
+                        <div class="property-overview-box-text">
+                            <span>Floor</span>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+
+                
+                <!--locations-->
+                <div class="post-instalment-box-container">
+                    <div class="post-page-location-box">
+                        <span><i class="fa-solid fa-location-dot"></i> {{post.address}}</span>
+                    </div>
+                    <div class="post-page-location-box">
+                        <span><i class="fa-solid fa-tree-city"></i> {{post.city}}</span>
+                    </div>
+                </div>
+
+            </div>
+
+
+            
+
+            <!--==Descriptions=================================-->
+            <div class="property-post-desc-container">
+                <strong><i class="fa-solid fa-circle-info"></i> Description</strong>
+                <div class="property-post-desc">
+                    <p>{{post.content}}</p>
+                </div>
+            </div>
+
+        </div>    
+
+    </div>
+    </div>
+
+    {% endif %}
+
+    
+</section>
+
+
+
+
+
+
+
+
+
+    {% block jsscript %}
+    <!-- Initialize Swiper -->
+    <script>
+      var swiper = new Swiper(".mySwiper", {
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+      });
+
+    </script>
+    <script>
+
+    const bidEndTime = document.getElementById('endbid')
+    const countdays = document.getElementById('countdays')
+    const counthours = document.getElementById('counthours')
+    const countminutes = document.getElementById('countminutes')
+    const countseconds = document.getElementById('countseconds')
+    //console.log(bidEnd.textContent)
+    const eventDate = Date.parse(bidEndTime.textContent)
+    //console.log(eventDate)
+
+    setInterval(()=>{
+        const now = new Date().getTime()
+        //console.log(now)
+
+        const diff = eventDate - now
+        //console.log(diff)
+        const eDate = eventDate
+        
+        const d = Math.floor(eDate / (1000 *60 * 60 * 24) - (now / (1000 *60 * 60 * 24)))
+        const h = Math.floor((eDate / (1000 *60 * 60) - (now / (1000 *60 * 60))) % 24)
+        const m = Math.floor((eDate / (1000 *60) - (now / (1000 *60))) % 60)
+        const s = Math.floor((eDate / (1000) - (now / (1000))) % 60)
+
+
+        if (diff>0){
+            countdays.innerHTML = d
+            counthours.innerHTML = h
+            countminutes.innerHTML = m
+            countseconds.innerHTML = s 
+        }
+        else{
+            countdays.innerHTML = 0
+            counthours.innerHTML = 0
+            countminutes.innerHTML = 0
+            countseconds.innerHTML = 0
+        }
+
+    }, 1000)
+
+
+    </script>
+    {% endblock jsscript %}
+
+
+
+
+{% endblock body %}

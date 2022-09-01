@@ -1,0 +1,116 @@
+{% extends 'dashboard-base.html' %} <!--get all content from base.html-->
+
+
+{% block dash_advertisement %}active{% endblock dash_advertisement %}<!--active-button-->
+
+
+<!--***Content************************-->
+{% block dashboard_content %}
+
+<div class="dashboard-details">
+    <h1>Create Property Ads <i class="fa-solid fa-square-plus"></i></h1>
+
+    {% if messages %}
+    <ul class="messages-profile">
+        {% for message in messages %}
+            <li style="background-color:transparent;"  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <span style="background-color:#ffd4d3; border-radius:5px;">{{form.errors}}</span>
+    
+    <!--==Form=========================-->
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <p>
+            <label>Author<span>*</span></label>
+            <select name="author">
+                <option value="{{user.id}}">{{user.username}}</option>
+            </select>
+        </p>
+        <p>
+            <label>Title<span>*</span></label>
+            {{form.title}}
+        </p>
+        <p>
+            <label>Category<span>*</span></label>
+            {{form.category}}
+        </p>
+        <p>
+            <label>Slug<span>*</span></label>
+            {{form.slug}}
+        </p>
+        <p>
+            <label>Description<span>*</span></label>
+            {{form.content}}
+        </p>
+        <p>
+            <label>Marla</label>
+            {{form.marla}}
+        </p>
+        <p>
+            <label>Thumbnail<span>*</span></label>
+            {{form.thumbnail}}
+        </p>
+        <p>
+            <label>Monthly Instalment</label>
+            {{form.monthly_instalment}}
+            <span>*Leave this Blank "0" If you Don't want to Sell Your Property in Monthly Instalments or For Rent</span>
+        </p>
+        <p>
+            <label>Property Price</label>
+            {{form.property_price}}
+            <span>*Leave this Blank "0", If you Sell Your Property Only For Rent, Not For Permanently Buy</span>
+        </p>
+        <p>
+            <label>Advance Payment</label>
+            {{form.advance}}
+        </p>
+        <p>
+            <label>Years To Complete Lease</label>
+            {{form.lease_complete_in_years}}
+            <span>Leave This Blank, If You Don't Want to Sell Your Property For Lease</span>
+        </p>
+        <p>
+            <label>Property Image - 1</label>
+            {{form.property_img1}}
+        </p>
+        <p>
+            <label>Property Image - 2</label>
+            {{form.property_img2}}
+        </p>
+        <p>
+            <label>Property Image - 3</label>
+            {{form.property_img3}}
+        </p>
+        <p>
+            <label>Address<span>*</span></label>
+            {{form.address}}
+        </p>
+        <p>
+            <label>City<span>*</span></label>
+            {{form.city}}
+        </p>
+        <p>
+            <label>Rooms</label>
+            {{form.room}}
+        </p>
+        <p>
+            <label>Bathrooms</label>
+            {{form.bathroom}}
+        </p>
+        <p>
+            <label>Kitchens</label>
+            {{form.kitchen}}
+        </p>
+        <p>
+            <label>Floors</label>
+            {{form.floor}}
+        </p>
+        <button>Post</button>
+    </form>
+
+</div>
+
+{% endblock dashboard_content %}

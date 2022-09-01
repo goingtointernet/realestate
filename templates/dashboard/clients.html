@@ -1,0 +1,57 @@
+{% extends 'dashboard-base.html' %} <!--get all content from base.html-->
+
+
+{% block dash_clients %}active{% endblock dash_clients %}<!--active-button-->
+
+
+<!--***Content************************-->
+{% block dashboard_content %}
+
+<div class="dashboard-details">
+    <!--heading-->
+    <h1 class="dash-heading"><i class="fa-solid fa-user"></i> All Clients</h1>
+
+    {% if messages %}
+    <ul class="messages-profile" style="margin:10px auto;">
+        {% for message in messages %}
+            <li style="background-color:transparent; margin:10px auto;"  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    
+    {% if client|length < 1 %}
+    <div style="color:red; text-align:center;">
+        <br/>
+        <span>*No Client, <b>Please Create User</b></span>
+    </div>
+    {% endif %}
+
+
+    {% for client  in client %}
+        
+            <div class="dash-all-post-box">
+                <div class="dash-all-box-text">
+                    <a href="{% url 'edit_user' client.pk %}"><i class="fa-solid fa-user"></i> {{client.username}}</a>
+                    <span>
+                        {% if client.is_admin == True or client.is_superuser == True %}
+                            Admin
+                        {% elif client.is_seller == True %}
+                            Seller
+                        {% elif client.is_buyer == True %}
+                            Buyer
+                        {% endif %}
+                    </span>
+                </div>
+                {% if client.is_active == True %}
+                    <p class="user-active">Active</p>
+                {% else %}
+                    <p class="user-deactive">De-Active</p>
+                {% endif %}
+            </div>
+    {% endfor %}
+
+</div>
+
+
+{% endblock dashboard_content %}

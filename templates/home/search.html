@@ -1,0 +1,124 @@
+{% extends 'base.html' %} <!--get all content from base.html-->
+
+
+<!--==Title========================-->
+{% block title %}Profile{% endblock title %}
+
+
+<!--==Main-Class====================-->
+{% block othermain %}change-main{% endblock othermain %}
+
+<!--==Nav-logo=====================-->
+{% block navlogo %}
+{% load static %}
+{% static 'images/real_estate_advisor_system_blackLogo.png' %}
+{% endblock navlogo %}
+
+
+<!--==Body=========================-->
+{% block body %}
+
+<br/>
+<br/>
+<!--==Search=========================-->
+<div class="search-container">
+    <strong><i class="fa-solid fa-magnifying-glass"></i> Search</strong>
+    <form class="search-box" method="GET" action="/search">
+
+        <!--city-->
+        <select name="city" id="city">
+            {% for city in city%}
+                <option value="{{city.city}}">{{city.city}}</option>
+            {% endfor %}
+        </select>
+
+        <select name="category" id="category">
+            {% for category in category%}
+                <option value="{{category.id}}">{{category.name}}</option>
+            {% endfor %}
+        </select>
+        <input  type="number" name="maxprice" placeholder="Max Price"/>
+        <input type="submit" value="Search">
+
+    </form>
+    </div>
+
+
+
+<section class="property-page">
+
+    <!--==Heading==-->
+    <div class="search-heading">
+        <h1>Search Results:</h1>
+    </div>
+
+    {% if buyproperty|length < 1 %}
+    <div class="search-not-found">
+        <img src="{% static 'images/not_found.svg' %}" />
+        <span>Property Not Found, <b>Try Another</b></span>
+    </div>
+    {% endif %}
+
+
+    {% for buyproperty in buyproperty%}
+    <!--==Box==============================-->
+    <div class="property-box">
+        <!--img-->
+        <a href="{% url 'allproperty' %}{{buyproperty.slug}}" class="property-box-img">
+            <img src="/{{buyproperty.thumbnail}}" alt="title">
+            <span class="p-box-category">{{buyproperty.category}}</span>
+            <span class="p-box-location"><i class="fa-solid fa-location-dot"></i> {{buyproperty.address}}</span>
+            <span class="p-box-city"><i class="fa-solid fa-city"></i>{{buyproperty.city}}</span>
+        </a>
+        <!--text-->
+        <div class="property-box-text">
+            <a href="{% url 'allproperty' %}{{buyproperty.slug}}">{{buyproperty.title}}</a>
+            {% if buyproperty.monthly_instalment > 0 %}
+                <span class="p-box-price"><span>pkr.</span>{{buyproperty.monthly_instalment}}<span>/month</span></span>
+            {% else %}    
+                <span class="p-box-price"><span>pkr.</span>{{buyproperty.property_price}}</span>
+            {% endif %}
+            <p>{{buyproperty.content}}</p>
+            <div class="p-box-specifications">
+
+                {% if buyproperty.marla > 0 %}
+                <div class="specifications-box">
+                    <img src="{% static 'images/area.png' %}" alt="">
+                    <span>{{buyproperty.marla}} Marla</span>
+                </div>
+                {% endif %}
+
+                {% if buyproperty.room > 0 %}
+                <div class="specifications-box">
+                    <i class="fa-solid fa-bed"></i>
+                    <span>{{buyproperty.room}} Room</span>
+                </div>
+                {% endif %}
+
+                {% if buyproperty.floor > 0 %}
+                <div class="specifications-box">
+                    <i class="fa-solid fa-turn-up"></i>
+                    <span>{{buyproperty.floor}} Floor</span>
+                </div>
+                {% endif %}
+
+                {% if buyproperty.bathroom > 0 %}
+                        <div class="specifications-box">
+                            <i class="fa-solid fa-shower"></i>
+                            <span>{{buyproperty.bathroom}} Bathroom</span>
+                        </div>
+                {% endif %}
+
+            </div>
+            <div class="p-box-seller">
+                <img src="/{{buyproperty.author.profile_img}}" alt="">
+                <span>{{buyproperty.author.first_name}} {{buyproperty.author.last_name}}</span>
+            </div>
+        </div>
+    </div>
+
+    {% endfor %}
+</section>
+
+
+{% endblock body %}

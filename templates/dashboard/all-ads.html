@@ -1,0 +1,50 @@
+{% extends 'dashboard-base.html' %} <!--get all content from base.html-->
+
+
+{% block dash_advertisement %}active{% endblock dash_advertisement %}<!--active-button-->
+
+
+<!--***Content************************-->
+{% block dashboard_content %}
+
+<div class="dashboard-details">
+    <!--heading-->
+    <h1 class="dash-heading"><i class="fa-solid fa-copy"></i> All Advertisements</h1>
+
+    {% if messages %}
+    <ul class="messages-profile" style="margin:10px auto;">
+        {% for message in messages %}
+            <li style="background-color:transparent; margin:10px auto;"  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    {% if propertyads|length < 1 %}
+    <div style="color:red; text-align:center;">
+        <br/>
+        <span>*No Ads Here, <b>Please Create Ads</b></span>
+    </div>
+    {% endif %}
+
+    {% for properties  in propertyads %}
+            <div class="dash-all-post-box">
+                <div class="dash-all-post-img">
+                    <img src="/{{properties.thumbnail}}"/>
+                </div>
+                <div class="dash-all-post-box-title">
+                    <strong>{{properties.title}}</strong>
+                    <p>{{properties.category}}</p>
+                </div>
+                <div class="dash-all-post-box-btns">
+                    <a href="{% url 'edit_ads' properties.slug %}" class="dash-post-edit-btn"><i class="fa-solid fa-pen-to-square"></i></a>
+                    <a href="{% url 'delete_ads' properties.slug %}" class="dash-post-delete-btn"><i class="fa-solid fa-trash"></i></a>
+                </div>
+            </div>
+    {% endfor %}
+
+</div>
+
+
+<a class="sticky-create-btn" href="{% url 'property_advertisement' %}">+</a>
+
+{% endblock dashboard_content %}

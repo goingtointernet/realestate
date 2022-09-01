@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!--==title==============================-->
+    <title>DashBoard - Real Estate Advisor System</title>
+
+    {% load static %}
+    <!--==Stylesheet=======================================================-->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/p_style.css' %}"/>
+    
+    <!--==Fav-icon=========================================================-->
+    <link rel="shortcut icon" href="{% static 'images/fav-icon.png' %}"/>
+    
+
+    <!--==Using-Font-Awesome-for-Icons=====================================-->
+    <script src="https://kit.fontawesome.com/6bd6c771de.js" crossorigin="anonymous"></script>
+
+    <!--==Import-Font-Family-From-Google-Font======================-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+
+</head>
+<body>
+    
+    <section class="dashboard">
+        <!--**menu-container****************-->
+        <div class="dashboard-menu-container">
+            <!--==menu-bar====================-->
+            <a href="javascript:void(0)" class="dashboard-menu-icon">
+                <i class="fa-solid fa-bars"></i>
+            </a>
+            <!--logo-->
+            <div class="dashboard-logo">
+                <a href="{% url 'index' %}">
+                    <img src="{% static 'images/Real_Estate_Adivsor_System_Logo.webp' %}" alt="Real Estate Advisor Sysytem"/>
+                </a>
+            </div>
+            <!--menu-->
+            <ul class="dashboard-menu">
+                <li><a href="{% url 'create_post' %}" class="{% block dash_create_post %}{% endblock dash_create_post %}" ><i class="fa-solid fa-square-plus"></i>Create Post</a></li>
+                <li><a href="{% url 'all_posts' %}" class="{% block dash_posts %}{% endblock dash_posts %}" ><i class="fa-solid fa-copy"></i> All Posts</a></li>
+                <li><a href="{% url 'd_all_bidding' %}" class="{% block dash_bidding %}{% endblock dash_bidding %}" ><i class="fa-solid fa-gavel"></i> Bidding</a></li>
+                <li><a href="{% url 'reports' %}" class="{% block dash_report %}{% endblock dash_report %}" ><i class="fa-solid fa-bullhorn"></i> Reports</a></li>
+                {% if user.is_superuser or user.is_admin %}
+                <li><a href="{% url 'all_pages' %}" class="{% block dash_pages %}{% endblock dash_pages %}" ><i class="fa-solid fa-file-lines"></i> Pages</a></li>
+                <li><a href="{% url 'all_category' %}" class="{% block dash_category %}{% endblock dash_category %}" ><i class="fa-solid fa-list"></i> Category</a></li>
+                <li><a href="{% url 'all_clients' %}" class="{% block dash_clients %}{% endblock dash_clients %}" ><i class="fa-solid fa-user"></i> Clients</a></li>
+                <li><a href="{% url 'all_ads' %}" class="{% block dash_advertisement %}{% endblock dash_advertisement %}" ><i class="fa-solid fa-rectangle-ad"></i> Advertisement</a></li>
+                <li><a href="{% url 'edit_footer' footerdata.pk %}" class="{% block dash_footer%}{% endblock dash_footer %}" ><i class="fa-solid fa-layer-group"></i> Footer</a></li>
+                {% endif %}
+            </ul>
+            <!--logout-->
+            <a href="{% url 'logoutUser' %}" class="dashboard-logout">Logout <i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+        </div>
+        <!--**Details-container*************-->
+        <div class="dashboard-details-container">
+
+            <div class="dashboard-nav">
+                <input type="checkbox" class="user-icon-checkbox" id="user-icon">
+                <label for="user-icon" class="user-icon">
+                    <img src="/{{user.profile_img}}"/>
+                </label>
+            </div>
+
+            {% block dashboard_content %}{% endblock dashboard_content %}
+
+
+            <br/><br/>
+        </div>
+    </section>
+
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script>
+        $(document).on('click','.dashboard-menu-icon', function(){
+            $('.dashboard').toggleClass('dashboard-active')
+        });
+ 
+    </script>
+
+</body>
+</html>

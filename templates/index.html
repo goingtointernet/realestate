@@ -1,0 +1,449 @@
+{% extends 'base.html' %} <!--get all content from base.html-->
+
+
+<!--==Title========================-->
+{% block title %}Home{% endblock title %}
+
+<!--==Nav-logo=====================-->
+{% block navlogo %}
+{% load static %}
+{% static 'images/Real_Estate_Adivsor_System_Logo.webp' %}{% endblock navlogo %}
+
+
+
+<!--==Body=========================-->
+{% block body %}
+
+<br/><br/>
+<!--==Search=========================-->
+<div class="search-container">
+  <strong><i class="fa-solid fa-magnifying-glass"></i> Search</strong>
+  <form class="search-box" method="GET" action="/search">
+
+      <!--city-->
+      <select name="city" id="city">
+          {% for city in city%}
+              <option value="{{city.city}}">{{city.city}}</option>
+          {% endfor %}
+      </select>
+
+      <select name="category" id="category">
+          {% for category in category%}
+              <option value="{{category.id}}">{{category.name}}</option>
+          {% endfor %}
+      </select>
+      <input  type="number" name="maxprice" placeholder="Max Price"/>
+      <input type="submit" value="Search">
+
+  </form>
+  </div>
+
+<!--==all======================================-->
+<section id="home-mix-property">
+    <div class="home-property-section">
+
+    <div class="home-proerty-section-heading">
+        <h3>Recent Properties</h3>
+
+        <a href="{% url 'allproperty' %}">All View</a>
+    </div>
+
+    
+    {% if buyproperty|length < 1 %}
+      <span style="text-align:center; color:red;">*No Property Available</span>
+    {% endif %}
+
+    <!-- Swiper -->
+    <div class="swiper mySwiper homeswiper">
+        <div class="swiper-wrapper">
+        {% for buyproperty in buyproperty|slice:":6" %}
+          <!--Slide-box-->
+          <div class="swiper-slide">
+            <div class="slider-property-box">
+                <!--img-->
+                <a href="{% url 'allproperty' %}{{buyproperty.slug}}" class="property-box-img">
+                    <img src="/{{buyproperty.thumbnail}}" alt="title">
+                    <span class="p-box-category">{{buyproperty.category}}</span>
+                    <span class="p-box-location"><i class="fa-solid fa-location-dot"></i> {{buyproperty.address}}</span>
+                    <span class="p-box-city"><i class="fa-solid fa-city"></i>{{buyproperty.city}}</span>
+                </a>
+                <!--text-->
+                <div class="property-box-text">
+                    <a href="{% url 'allproperty' %}{{buyproperty.slug}}">{{buyproperty.title}}</a>
+                    {% if buyproperty.monthly_instalment > 0 %}
+                      <span class="p-box-price"><span>pkr.</span>{{buyproperty.monthly_instalment}}<span>/month</span></span>
+                    {% else %}    
+                      <span class="p-box-price"><span>pkr.</span>{{buyproperty.property_price}}</span>
+                    {% endif %}
+
+                    <p>{{buyproperty.content}}</p>
+                    <div class="p-box-specifications">
+
+                      {% if buyproperty.marla > 0 %}
+                        <div class="specifications-box">
+                            <img src="{% static 'images/area.png' %}" alt="">
+                            <span>{{buyproperty.marla}} Marla</span>
+                        </div>
+                      {% endif %}
+
+                      {% if buyproperty.room > 0 %}
+                        <div class="specifications-box">
+                            <i class="fa-solid fa-bed"></i>
+                            <span>{{buyproperty.room}} Room</span>
+                        </div>
+                      {% endif %}
+
+                      {% if buyproperty.floor > 0 %}
+                        <div class="specifications-box">
+                            <i class="fa-solid fa-turn-up"></i>
+                            <span>{{buyproperty.floor}} Floor</span>
+                        </div>
+                      {% endif %}
+
+                      {% if buyproperty.bathroom > 0 %}
+                        <div class="specifications-box">
+                            <i class="fa-solid fa-shower"></i>
+                            <span>{{buyproperty.bathroom}} Bathroom</span>
+                        </div>
+                      {% endif %}
+
+                    </div>
+                    <div class="p-box-seller">
+                        <img src="/{{buyproperty.author.profile_img}}" alt="">
+                        <span>{{buyproperty.author.first_name}} {{buyproperty.author.last_name}}</span>
+                    </div>
+                </div>
+            </div>
+          </div>
+        {% endfor %}
+        </div>
+        <div class="swiper-pagination"></div>
+      </div>
+
+
+    
+    </div>
+</section>
+
+
+
+<!--==Ads======================================-->
+<section id="ads-property">
+  <div class="home-property-section">
+
+  <!-- Swiper -->
+  <div class="swiper mySwiper mySwiperads">
+      <div class="swiper-wrapper">
+      {% for buyproperty in ads|slice:":6"%}
+        <!--Slide-box-->
+        <div class="swiper-slide">
+          <div class="slider-property-box">
+            <!--ad-label-->
+            <span class="slider-ad-label">Ad</span>
+              <!--img-->
+              <a href="{% url 'all_advertisement' %}{{buyproperty.slug}}" class="property-box-img">
+                  <img src="/{{buyproperty.thumbnail}}" alt="title">
+                  <span class="p-box-category">{{buyproperty.category}}</span>
+                    {% if buyproperty.monthly_instalment > 0 %}
+                    <span class="p-box-price"><span>pkr.</span>{{buyproperty.monthly_instalment}}<span>/month</span></span>
+                    {% else %}    
+                    <span class="p-box-price"><span>pkr.</span>{{buyproperty.property_price}}</span>
+                    {% endif %}
+                  
+                  <span class="p-box-city"><i class="fa-solid fa-city"></i>{{buyproperty.city}}</span>
+              </a>
+          </div>
+        </div>
+      {% endfor %}
+      </div>
+      <div class="swiper-pagination"></div>
+    </div>
+
+
+  
+  </div>
+</section>
+
+
+
+
+<!--==For-rent===================================-->
+
+<section id="home-rent-property">
+  <div class="home-property-section">
+
+  <div class="home-proerty-section-heading home-rent-s-heading">
+      <h3>Properties For Rent</h3>
+       <!--btns-->
+      <div class="home-slider-btns">
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+      </div>
+
+      <a href="{% url 'allrent' %}">All View</a>
+
+  </div>
+
+  {% if rentproperty|length < 1 %}
+    <span style="text-align:center; color:red;">*No Property Available</span>
+  {% endif %}
+
+  <!-- Swiper -->
+  <div class="swiper mySwiper mySwiperrent homeswiper">
+      <div class="swiper-wrapper">
+      {% for rentproperty in rentproperty|slice:":10" %}
+        <!--Slide-box-->
+        <div class="swiper-slide">
+          <div class="slider-property-box">
+              <!--img-->
+              <a href="{% url 'allproperty' %}{{rentproperty.slug}}" class="property-box-img">
+                  <img src="/{{rentproperty.thumbnail}}" alt="title">
+                  <span class="p-box-category">{{rentproperty.category}}</span>
+                  <span class="p-box-location"><i class="fa-solid fa-location-dot"></i> {{rentproperty.address}}</span>
+                  <span class="p-box-city"><i class="fa-solid fa-city"></i>{{rentproperty.city}}</span>
+              </a>
+              <!--text-->
+              <div class="property-box-text">
+                  <a href="{% url 'allproperty' %}{rentproperty.slug}}">{{rentproperty.title}}</a>
+                  <span class="p-box-price">{{rentproperty.monthly_instalment}}<span>/Month</span></span>
+                  <p>{{rentproperty.content}}</p>
+                  <div class="p-box-specifications">
+
+                    {% if rentproperty.marla > 0 %}
+                      <div class="specifications-box">
+                          <img src="{% static 'images/area.png' %}" alt="">
+                          <span>{{rentproperty.marla}} Marla</span>
+                      </div>
+                    {% endif %}
+
+                    {% if rentproperty.room > 0 %}
+                      <div class="specifications-box">
+                          <i class="fa-solid fa-bed"></i>
+                          <span>{{rentproperty.room}} Room</span>
+                      </div>
+                    {% endif %}
+
+                    {% if rentproperty.floor > 0 %}
+                      <div class="specifications-box">
+                          <i class="fa-solid fa-turn-up"></i>
+                          <span>{{rentproperty.floor}} Floor</span>
+                      </div>
+                    {% endif %}
+
+                    {% if rentproperty.bathroom > 0 %}
+                        <div class="specifications-box">
+                            <i class="fa-solid fa-shower"></i>
+                            <span>{{rentproperty.bathroom}} Bathroom</span>
+                        </div>
+                    {% endif %}
+
+                  </div>
+                  <div class="p-box-seller">
+                      <img src="/{{rentproperty.author.profile_img}}" alt="">
+                      <span>{{rentproperty.author.first_name}} {{rentproperty.author.last_name}}</span>
+                  </div>
+              </div>
+          </div>
+        </div>
+      {% endfor %}
+      </div>
+      <div class="swiper-pagination"></div>
+    </div>
+
+
+  
+  </div>
+</section>
+
+
+
+
+<!--==For-Lease===================================-->
+
+<section id="home-lease-property">
+  <div class="home-property-section">
+
+  <div class="home-proerty-section-heading home-rent-s-heading">
+      <h3>Properties For Lease</h3>
+
+      <a href="{% url 'alllease' %}">All View</a>
+
+  </div>
+
+  {% if leaseproperty|length < 1 %}
+    <span style="text-align:center; color:red;">*No Property Available</span>
+  {% endif %}
+
+  <!-- Swiper -->
+  <div class="swiper mySwiper mySwiperlease homeswiper">
+      <div class="swiper-wrapper">
+      {% for leaseproperty in leaseproperty|slice:10 %}
+        <!--Slide-box-->
+        <div class="swiper-slide">
+          <div class="slider-property-box">
+              <!--img-->
+              <a href="{% url 'allproperty' %}{{leaseproperty.slug}}" class="property-box-img">
+                  <img src="/{{leaseproperty.thumbnail}}" alt="title">
+                  <span class="p-box-category">{{leaseproperty.category}}</span>
+                  <span class="p-box-location"><i class="fa-solid fa-location-dot"></i> {{leaseproperty.address}}</span>
+                  <span class="p-box-city"><i class="fa-solid fa-city"></i>{{leaseproperty.city}}</span>
+              </a>
+              <!--text-->
+              <div class="property-box-text">
+                  <a href="{% url 'allproperty' %}{leaseproperty.slug}}">{{leaseproperty.title}}</a>
+                  <span class="p-box-price">{{leaseproperty.monthly_instalment}}<span>/Month</span></span>
+                  <p>{{leaseproperty.content}}</p>
+                  <div class="p-box-specifications">
+
+                    {% if leaseproperty.marla > 0 %}
+                      <div class="specifications-box">
+                          <img src="{% static 'images/area.png' %}" alt="">
+                          <span>{{leaseproperty.marla}} Marla</span>
+                      </div>
+                    {% endif %}
+
+                    {% if leaseproperty.room > 0 %}
+                      <div class="specifications-box">
+                          <i class="fa-solid fa-bed"></i>
+                          <span>{{leaseproperty.room}} Room</span>
+                      </div>
+                    {% endif %}
+
+                    {% if leaseproperty.floor > 0 %}
+                      <div class="specifications-box">
+                          <i class="fa-solid fa-turn-up"></i>
+                          <span>{{leaseproperty.floor}} Floor</span>
+                      </div>
+                    {% endif %}
+
+                    {% if leaseproperty.bathroom > 0 %}
+                        <div class="specifications-box">
+                            <i class="fa-solid fa-shower"></i>
+                            <span>{{leaseproperty.bathroom}} Bathroom</span>
+                        </div>
+                    {% endif %}
+
+                  </div>
+                  <div class="p-box-seller">
+                      <img src="/{{leaseproperty.author.profile_img}}" alt="">
+                      <span>{{leaseproperty.author.first_name}} {{leaseproperty.author.last_name}}</span>
+                  </div>
+              </div>
+          </div>
+        </div>
+      {% endfor %}
+      </div>
+      <div class="swiper-pagination"></div>
+    </div>
+
+
+  
+  </div>
+</section>
+
+
+{% block jsscript %}
+
+    <!-- Initialize Swiper -->
+    <script>
+        var swiper = new Swiper(".mySwiper", {
+          slidesPerView: 3,
+          spaceBetween: 30,
+          pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+          },
+          
+          breakpoints: {
+            1000: {
+              slidesPerView: 3,
+              spaceBetween: 20,
+            },
+            650: {
+              slidesPerView: 2,
+              spaceBetween: 40,
+            },
+            0: {
+                slidesPerView: 1,
+                spaceBetween: 40,
+              },
+          },
+        });
+
+        var swiper = new Swiper(".mySwiperrent", {
+          slidesPerView: 3,
+          spaceBetween: 30,
+          pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+          },
+          navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+          },
+          
+          breakpoints: {
+            1000: {
+              slidesPerView: 3,
+              spaceBetween: 20,
+            },
+            650: {
+              slidesPerView: 2,
+              spaceBetween: 40,
+            },
+            0: {
+                slidesPerView: 1,
+                spaceBetween: 40,
+              },
+          },
+        });
+
+        var swiper = new Swiper(".mySwiperlease", {
+          slidesPerView: 3,
+          spaceBetween: 30,
+          pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+          },
+          
+          breakpoints: {
+            1000: {
+              slidesPerView: 3,
+              spaceBetween: 20,
+            },
+            650: {
+              slidesPerView: 2,
+              spaceBetween: 40,
+            },
+            0: {
+                slidesPerView: 1,
+                spaceBetween: 40,
+              },
+          },
+        });
+
+
+        var swiper = new Swiper(".mySwiperads", {
+          slidesPerView: 2,
+          spaceBetween: 20,
+          pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+          },
+          
+          breakpoints: {
+            950: {
+              slidesPerView: 2,
+              spaceBetween: 20,
+            },
+            0: {
+                slidesPerView: 1,
+                spaceBetween: 40,
+              },
+          },
+        });
+      </script>
+
+{% endblock jsscript %}
+
+{% endblock body %}

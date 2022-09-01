@@ -1,0 +1,46 @@
+{% extends 'dashboard-base.html' %} <!--get all content from base.html-->
+
+
+{% block dash_pages %}active{% endblock dash_pages %}<!--active-button-->
+
+
+<!--***Content************************-->
+{% block dashboard_content %}
+
+<div class="dashboard-details">
+    <!--heading-->
+    <h1 class="dash-heading"><i class="fa-solid fa-copy"></i> All Pages</h1>
+
+    {% if messages %}
+    <ul class="messages-profile" style="margin:10px auto;">
+        {% for message in messages %}
+            <li style="background-color:transparent; margin:10px auto;"  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    {% if post|length < 1 %}
+    <div style="color:red; text-align:center;">
+        <br/>
+        <span>*No Pages Created, <b>Please Create Page</b></span>
+    </div>
+    {% endif %}
+
+
+    {% for page  in post %}
+        
+            <div class="dash-all-post-box">
+                <i class="fa-solid fa-file-lines page-icon"></i> {{page.page_name}}
+                <div class="dash-all-post-box-btns">
+                    <a href="{% url 'edit_page' page.slug %}" class="dash-post-edit-btn"><i class="fa-solid fa-pen-to-square"></i></a>
+                    <a href="{% url 'delete_page' page.slug %}" class="dash-post-delete-btn"><i class="fa-solid fa-trash"></i></a>
+                </div>
+            </div>
+    {% endfor %}
+
+</div>
+
+
+<a class="sticky-create-btn" href="{% url 'create_page' %}">+</a>
+
+{% endblock dashboard_content %}

@@ -1,0 +1,79 @@
+{% extends 'base.html' %} <!--get all content from base.html-->
+
+
+<!--==Title========================-->
+{% block title %}My Bidding List{% endblock title %}
+
+
+<!--==Main-Class====================-->
+{% block othermain %}change-main{% endblock othermain %}
+
+<!--==Nav-logo=====================-->
+{% block navlogo %}
+{% load static %}
+{% static 'images/real_estate_advisor_system_blackLogo.png' %}
+{% endblock navlogo %}
+
+
+<!--==Body=========================-->
+{% block body %}
+
+
+
+<section class="property-page">
+
+
+    <section class="my-bidding-list">
+        <h3><i class="fa-solid fa-gavel"></i> Your Bidding List</h3>
+        {% if bidding_participate|length < 1 %}
+        <div class="search-not-found">
+            <img src="{% static 'images/not_found.svg' %}" />
+            <span>*No Bidding <b>Available</b></span>
+        </div>
+        {% endif %}
+
+    <div class="my-bidding-list-container">
+        {% for bidding_participate in bidding_participate%}
+        
+        <div class="my-bidding-box">
+            {% if bidding_participate.item.end_bidding < current_datetime %}
+            <span class="my-list-bidding-time">Closed</span>
+            {% else %}
+            <span class="my-list-bidding-time">End: {{bidding_participate.bidding_time}}</span>
+            {% endif %}
+            <!--img-->
+            <div class="m-b-box-img">
+                <img src="/{{bidding_participate.item.thumbnail}}" alt="{{bidding_participate.item.title}}">
+                <div class="m-b-box-text">
+                    <span>{{bidding_participate.item}}</span>
+                    <span><font style="color: #333333; font-size:0.8rem">Bid Price:</font> Rs.<b>{{bidding_participate.bidding_price}}</b></span>
+                </div>
+            </div>
+            
+            
+            {% if bidding_participate.item.end_bidding < current_datetime %}
+            <span class="m-b-box-msg">*🎉 Winner is Announced 🎉 <b style="margin-left: 8px;"><a href="{% url 'all_bidding' %}{{bidding_participate.item.slug}}">Check Winner</a></b></span>
+            {% else %}
+            <span class="m-b-box-msg">*Winner is Not Announced <b style="margin-left: 8px;">Please Wait</b></span>
+            {% endif %}
+
+
+            <span>{{highest_bid}}</span>
+        </div>
+    
+        {% endfor %}
+
+    </div>
+    </section>
+   
+</section>
+
+
+
+
+
+
+<!--==Javascript-->
+
+
+{% endblock body %}

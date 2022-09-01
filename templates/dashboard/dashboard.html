@@ -1,0 +1,21 @@
+{% extends 'dashboard-base.html' %} <!--get all content from base.html-->
+
+
+
+<!--***Content************************-->
+{% block dashboard_content %}
+
+{% if messages %}
+    <ul class="messages-profile" style="margin:10px auto;">
+        {% for message in messages %}
+            <li style="background-color:transparent; margin:10px auto;"  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+<div class="dashboard-details">
+    <h1><i class="fa-solid fa-layer-group"></i> Welcome To DashBoard</h1>
+    <p class="dashboard-welcome-text">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolorem dolores cupiditate at exercitationem labore dignissimos debitis, rem quo, obcaecati architecto error ea ab. Ad incidunt autem voluptates earum veniam rem! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nostrum fugiat a nesciunt provident aspernatur soluta accusantium dolore eius animi! Molestiae, quis. Atque sapiente sequi dolorem dicta. Eligendi recusandae facilis doloremque? Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis placeat doloremque dicta facilis doloribus facere corrupti a fuga incidunt, eveniet ipsum illo optio reprehenderit ad magnam fugiat laborum, culpa possimus.</p>
+</div>
+
+{% endblock dashboard_content %}

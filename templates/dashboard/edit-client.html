@@ -1,0 +1,69 @@
+{% extends 'dashboard-base.html' %} <!--get all content from base.html-->
+
+
+{% block dash_clients %}active{% endblock dash_clients %}<!--active-button-->
+
+
+<!--***Content************************-->
+{% block dashboard_content %}
+
+    <div class="dashboard-details">
+        <!--heading-->
+        <h1>Edit User <i class="fa-solid fa-square-plus"></i></h1>
+    
+        <form method="POST" class="client-form" enctype="multipart/form-data" >
+            {% csrf_token %}
+            
+            <div class="user-active-box">
+                <label>Active Status:</label>
+                {{form.is_active}}
+            </div>
+            <p><span>*Marked Checked For Active and Marked Un-Check For De-Activate The User.</span></p>
+            
+            <div class="dash-user-personal">
+                <p>
+                    <label>Username</label>
+                    {{form.username}}
+                </p>
+                <p>
+                    <label>First Name</label>
+                    {{form.first_name}}
+                </p>
+                <p>
+                    <label>Last Name</label>
+                    {{form.last_name}}
+                </p>
+                <p>
+                    <label>Email</label>
+                    {{form.email}}
+                </p>
+                <p>
+                    <label>Phone</label>
+                    {{form.phone}}
+                </p>
+                <p>
+                    <label>Bio</label>
+                    {{form.bio}}
+                </p>
+            </div>
+
+            <div class="user-active-box">
+                <label>SuperUser/Admin:</label>
+                {{form.is_superuser}}
+            </div>
+
+            <br/>
+            <p><span>*Marked Checked For Make This User SuperUser/Admin and Marked Un-Check For Make This User a Normal User.</span></p>
+
+
+            <button>Update</button>
+        </form>
+    
+    </div>
+
+
+
+
+
+
+{% endblock dashboard_content %}

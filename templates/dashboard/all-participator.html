@@ -1,0 +1,42 @@
+{% extends 'dashboard-base.html' %} <!--get all content from base.html-->
+
+
+{% block dash_bidding %}active{% endblock dash_bidding %}<!--active-button-->
+
+
+<!--***Content************************-->
+{% block dashboard_content %}
+
+<div class="dashboard-details">
+    <!--heading-->
+    <h1 class="dash-heading"><i class="fa-solid fa-copy"></i> Participator</h1>
+
+
+
+
+    {% if bidding_participate|length < 1 %}
+    <div style="color:red; text-align:center;">
+        <br/>
+        <span>*No Participate Yet</span>
+    </div>
+    {% endif %}
+
+
+    {% for bidding_participate  in bidding_participate %}
+        <div class="d-participator-box">
+            <span class="participator-count">{{ forloop.counter }}</span>
+            <div class="participator-username-price">
+                <span class="participator-username">Username: <b>{{bidding_participate.paricipator.username}}</b></span>
+                <span class="participator-price">Rs.<b>{{bidding_participate.bidding_price}}</b></span>
+            </div>
+            <div class="participator-contact-info">
+                <span><i class="fa-solid fa-envelope"></i> {{bidding_participate.paricipator.email}}</span>
+                <span><i class="fa-solid fa-phone"></i> {{bidding_participate.paricipator.phone}}</span>
+            </div>
+        </div>
+    {% endfor %}
+
+</div>
+
+
+{% endblock dashboard_content %}

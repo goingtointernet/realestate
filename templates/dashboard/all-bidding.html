@@ -1,0 +1,84 @@
+{% extends 'dashboard-base.html' %} <!--get all content from base.html-->
+
+
+{% block dash_bidding %}active{% endblock dash_bidding %}<!--active-button-->
+
+
+<!--***Content************************-->
+{% block dashboard_content %}
+
+<div class="dashboard-details">
+    <!--heading-->
+    <h1 class="dash-heading"><i class="fa-solid fa-copy"></i> Your All Bids</h1>
+
+    {% if messages %}
+    <ul class="messages-profile" style="margin:10px auto;">
+        {% for message in messages %}
+            <li style="background-color:transparent; margin:10px auto;"  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+
+    {% if bidding|length < 1 %}
+    <div style="color:red; text-align:center;">
+        <br/>
+        <span>*No Bidding Created, <b>Please Create Bid</b></span>
+    </div>
+    {% endif %}
+
+
+    {% for bidding  in bidding %}
+        {% if bidding.bidder_id == user.id%}
+
+            <div class="dash-all-post-box dash-bid-all">
+                <div class="dash-all-post-img">
+                    <img src="/{{bidding.thumbnail}}"/>
+                </div>
+                <div class="dash-all-post-box-title">
+                    <strong>{{bidding.title}}</strong>
+                </div>
+                <div class="dash-all-post-box-btns">
+                    <a href="{% url 'edit_bid' bidding.slug %}" class="dash-post-edit-btn"><i class="fa-solid fa-pen-to-square"></i></a>
+                    <a href="{% url 'delete_bid' bidding.slug %}" class="dash-post-delete-btn"><i class="fa-solid fa-trash"></i></a>
+                </div>
+                <a href="{% url 'd_all_paricipator' bidding.slug %}" class="bidding-participator-link"><i class="fa-solid fa-users-rectangle"></i> Check Bidding participator <b style="margin-left:10px;"> EndTime ({{bidding.end_bidding}})</b></a>
+            </div>
+        {% endif %}
+    {% endfor %}
+
+</div>
+
+<!--==Other-User-Post-->
+
+{% if user.is_admin or user.is_superuser %}
+<div class="dashboard-details">
+    <!--heading-->
+    <h1 class="dash-heading"><i class="fa-solid fa-copy"></i> Other User Bids</h1>
+
+
+    {% for bidding  in bidding %}
+        {% if bidding.bidder_id != user.id%}
+            <div class="dash-all-post-box dash-bid-all">
+                <div class="dash-all-post-img">
+                    <img src="/{{bidding.thumbnail}}"/>
+                </div>
+                <div class="dash-all-post-box-title">
+                    <strong>{{bidding.title}}</strong>
+                    </div>
+                <div class="dash-all-post-box-btns">
+                    <a href="{% url 'edit_bid' bidding.slug %}" class="dash-post-edit-btn"><i class="fa-solid fa-pen-to-square"></i></a>
+                    <a href="{% url 'delete_bid' bidding.slug %}" class="dash-post-delete-btn"><i class="fa-solid fa-trash"></i></a>
+                </div>
+                <a href="{% url 'd_all_paricipator' bidding.slug %}" class="bidding-participator-link"><i class="fa-solid fa-users-rectangle"></i> Check Bidding participator <b style="margin-left:10px;"> EndTime ({{bidding.end_bidding}})</b></a>
+            </div>
+        
+
+        {% endif %}
+    {% endfor %}
+{% endif %}
+</div>
+
+<a class="sticky-create-btn" href="{% url 'create_bid' %}">+</a>
+
+{% endblock dashboard_content %}

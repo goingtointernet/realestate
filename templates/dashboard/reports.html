@@ -1,0 +1,26 @@
+{% extends 'dashboard-base.html' %} <!--get all content from base.html-->
+
+{% block dash_report %}active{% endblock dash_report %}<!--active-button-->
+
+
+
+<!--***Content************************-->
+{% block dashboard_content %}
+
+{% if messages %}
+    <ul class="messages-profile" style="margin:10px auto;">
+        {% for message in messages %}
+            <li style="background-color:transparent; margin:10px auto;"  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+<div class="dashboard-details">
+    <h1><i class="fa-solid fa-bullhorn"></i> New Announcement</h1>
+    <div class="dashboard-welcome-text"><p>{{reports.message | safe }}</p></div>
+</div>
+
+{% if user.is_admin or user.is_superuser %}
+    <a class="sticky-create-btn" href="{% url 'edit_reports' reports.pk %}"><i class="fa-solid fa-pen-to-square"></i></a>
+{% endif %}
+{% endblock dashboard_content %}

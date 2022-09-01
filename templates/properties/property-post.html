@@ -1,0 +1,272 @@
+{% extends 'base.html' %} <!--get all content from base.html-->
+
+
+<!--==Title========================-->
+{% block title %}{{post.title}}{% endblock title %}
+
+
+<!--==Main-Class====================-->
+{% block othermain %}change-main{% endblock othermain %}
+
+<!--==Nav-logo=====================-->
+{% block navlogo %}
+{% load static %}
+{% static 'images/real_estate_advisor_system_blackLogo.png' %}
+{% endblock navlogo %}
+
+
+<!--==Body=========================-->
+{% block body %}
+
+
+    <!--==Post-page=============================-->
+    <section id="property-post-page">
+
+    {% if post == None %}
+    <div class="search-not-found" style="margin:60px auto">
+        <img src="{% static 'images/not_found.svg' %}" />
+        <span>Page Not Found, <b>404</b></span>
+    </div>
+
+    {% else %}
+
+
+        <div class="property-post-container">
+            <span class="property-post-link"><a href="{% url 'index' %}">Home</a> > <a href="{% url 'allproperty' %}">Property</a> > {{post.category}}</span>
+        
+            <div class="post-page-wrapper">
+            <div class="post-page-details-container">
+            <!--**title***********************-->
+            <div class="property-post-title-container">
+                <div class="property-post-title">
+                    <h1>{{post.title}}</h1>
+                    <span class="property-post-category">{{post.category}}</span>
+                    <span class="property-post-location"><i class="fa-solid fa-location-dot"></i> {{post.address}}, {{post.city}}</span>
+                
+                </div>
+                <div class="property-post-price-container">
+            
+                    {% if post.monthly_instalment > 0 %}
+                        <span class="property-post-price"><span class="post-page-pkr">Pkr.</span>{{post.monthly_instalment}}<span>/Month</span></span>
+                    {% else %}
+                    <span class="property-post-price"><span class="post-page-pkr">Pkr.</span>{{post.property_price}}</span>
+                    {% endif %}
+
+                    {% if post.marla > 0 %}
+                        <span class="property-post-area">{{post.marla}} Marla</span>
+                    {% endif %}
+                </div>
+            </div>
+
+
+            {% if user.is_admin or user.is_superuser %}
+            <div class="dash-all-post-box-btns" style="margin-top:10px; margin-left:0px;">
+                <a href="{% url 'edit_post' post.slug %}" class="dash-post-edit-btn"><i class="fa-solid fa-pen-to-square"></i></a>
+                <a href="{% url 'delete_post' post.slug %}" class="dash-post-delete-btn"><i class="fa-solid fa-trash"></i></a>
+            </div>
+            {% endif %}
+
+            <!--**Slider************************-->
+            <div class="slider-conatiner">
+            <div class="swiper mySwiper">
+                <div class="swiper-wrapper">
+                    {% if post.thumbnail != '' %}
+                    <div class="swiper-slide">
+                        <img src="/{{post.thumbnail}}" alt="">
+                    </div>
+                    {% endif %}
+                    {% if post.property_img1 != '' %}
+                    <div class="swiper-slide">
+                        <img src="/{{post.property_img1}}" alt="">
+                    </div>
+                    {% endif %}
+                    {% if post.property_img2 != '' %}
+                    <div class="swiper-slide">
+                        <img src="/{{post.property_img2}}" alt="">
+                    </div>
+                    {% endif %}
+                    {% if post.property_img3 != '' %}
+                    <div class="swiper-slide">
+                        <img src="/{{post.property_img3}}" alt="">
+                    </div>
+                    {% endif %}
+                    
+                </div>
+            </div>
+            <!--btns-->
+            <div class="slider-btns">
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
+            </div>
+            </div>
+
+            <!--==Overview============================-->
+            <div class="post-property-overview">
+                <strong><i class="fa-solid fa-house-chimney-window"></i> Property Overview</strong>
+                <div class="proerty-overview-container">
+                    {% if post.marla > 0 %}
+                    <!---->
+                    <div class="property-overview-box">
+                        
+                        <div class="property-overview-box-img">
+                            <img src="{% static 'images/area.png' %}" alt="">
+                            <span>{{post.marla}}</span>
+                        </div>
+                        
+                        <div class="property-overview-box-text">
+                            <span>Marla</span>
+                        </div>
+                    </div>
+                    {% endif %}
+
+
+                    {% if post.room > 0 %}
+                    <!---->
+                    <div class="property-overview-box">
+                        <div class="property-overview-box-img">
+                            <i class="fa-solid fa-bed"></i>
+                            <span>{{post.room}}</span>
+                        </div>
+                        <div class="property-overview-box-text">
+                            <span>Bedroom</span>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if post.bathroom > 0 %}
+                    <!---->
+                    <div class="property-overview-box">
+                        <div class="property-overview-box-img">
+                            <i class="fa-solid fa-shower"></i>
+                            <span>{{post.bathroom}}</span>
+                        </div>
+                        <div class="property-overview-box-text">
+                            <span>bathroom</span>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if post.floor > 0 %}
+                    <!---->
+                    <div class="property-overview-box">
+                        <div class="property-overview-box-img">
+                            <i class="fa-solid fa-turn-up"></i>
+                            <span>{{post.floor}}</span>
+                        </div>
+                        <div class="property-overview-box-text">
+                            <span>Floor</span>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!--instalment-->
+                <div class="post-instalment-box-container">
+
+                    {% if post.monthly_instalment > 0 %}
+                    <div class="post-instalment-box">
+                        <strong>Instalment Pre Months</strong>
+                        <span><span>Pkr.</span> {{post.monthly_instalment}}</span>
+                    </div>
+                    {% endif %}
+
+                    
+                    {% if post.advance > 0 %}
+                    <div class="post-instalment-box">
+                        <strong>Advance Payment</strong>
+                        <span><span>Pkr.</span> {{post.advance}}</span>
+                    </div>
+                    {% endif %}
+
+                    {% if post.lease_complete_in_years > 0 %}
+                    <div class="post-instalment-box">
+                        <strong>Instalments Complete in</strong>
+                        <span>{{post.lease_complete_in_years}} Years</span>
+                    </div>
+                    {% endif %}
+
+                    {% if post.property_price > 0 %}
+                    <div class="post-instalment-box">
+                        <strong>Property Price</strong>
+                        <span><span>Pkr.</span> {{post.property_price}}</span>
+                    </div>
+                    {% endif %}
+
+
+                </div>
+
+                <!--locations-->
+                <div class="post-instalment-box-container">
+                    <div class="post-page-location-box">
+                        <span><i class="fa-solid fa-location-dot"></i> {{post.address}}</span>
+                    </div>
+                    <div class="post-page-location-box">
+                        <span><i class="fa-solid fa-tree-city"></i> {{post.city}}</span>
+                    </div>
+                </div>
+
+            </div>
+
+
+            
+
+            <!--==Descriptions=================================-->
+            <div class="property-post-desc-container">
+                <strong><i class="fa-solid fa-circle-info"></i> Description</strong>
+                <div class="property-post-desc">
+                    <p>{{post.content}}</p>
+                </div>
+            </div>
+
+        </div>    
+
+
+        <!--==Seller-Details==========================-->
+        <div class="post-seller-details">
+            <span class="post-seller-label">Seller Details</span>
+            <img style="margin-top:30px" src="/{{post.author.profile_img}}" alt="">
+            <strong>{{post.author.first_name}} {{post.author.last_name}}</strong>
+            <p><b>Bio:-</b><br>
+                {{post.author.bio}}
+                <br>
+                <span style="margin-top:10px"><i class="fa-solid fa-envelope"></i> {{post.author.email}}</span>
+                <span><i class="fa-solid fa-phone"></i> {{post.author.phone}}</span>
+                <span><i class="fa-solid fa-phone"></i> {{post.author.first_name}}</span>
+            </p>
+            <div class="post-seller-btns">
+                <a href="mailto:{{post.author.email}}" class="post-seller-email-btn"><i class="fa-solid fa-envelope"></i> Email</a>
+                <a href="tel:{{post.author.phone}}" class="post-seller-phone-btn"><i class="fa-solid fa-phone"></i> Phone</a>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    {% endif %}
+
+    
+</section>
+
+
+
+
+
+
+
+
+
+    {% block jsscript %}
+    <!-- Initialize Swiper -->
+    <script>
+      var swiper = new Swiper(".mySwiper", {
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+      });
+    </script>
+    {% endblock jsscript %}
+
+
+
+
+{% endblock body %}
