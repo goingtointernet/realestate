@@ -639,6 +639,12 @@ nav .menu-btn {
 
 
 }
+@media(max-width:450px){
+    .nav-login-contact .nav-login-btn{
+        margin: auto;
+        margin-top: 10px;
+    }
+}
 @media(max-width:340px){
     .footer-content{
         grid-template-columns: 1fr;
