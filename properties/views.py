@@ -19,7 +19,7 @@ def allproperty(request):
 #==all-Lease==========#
 def alllease(request):
     User == 'user'
-    buyproperty = BuyProperty.objects.filter(category='3')
+    buyproperty = BuyProperty.objects.filter(category='4')
     city = BuyProperty.objects.values('city').distinct()
     category = Category.objects.values('name','id').distinct()
     context = {'buyproperty': buyproperty,'city':city, 'category':category}
